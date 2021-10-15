@@ -15,4 +15,9 @@ var (
 	ErrEmailNotRegistered    = errors.New("Email not registered")
 	ErrPassword              = errors.New("Wrong Password")
 	ErrNotFoundUser          = errors.New("user doesn't exist")
+
+	//Cinema errors
+	ErrNearestCinemaNotFound = errors.New("No one Cinema found within your area")
+	ErrCinemaNotFound        = errors.New("Cinema not found")
+	ErrCinemaNotAvailable    = errors.New("Cinema is closed because of corona")
 )
