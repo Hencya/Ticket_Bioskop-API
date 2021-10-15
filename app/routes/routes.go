@@ -2,8 +2,9 @@ package routes
 
 import (
 	"TiBO_API/app/middleware/auth"
+	"TiBO_API/controllers/cinemasController"
+	"TiBO_API/controllers/moviesController"
 	"TiBO_API/controllers/usersController"
-	"TiBO_API/controllers/usersController/cinemasController"
 	"TiBO_API/helpers"
 	"errors"
 	"net/http"
@@ -15,6 +16,7 @@ import (
 type ControlerList struct {
 	UsersController   usersController.UserController
 	CinemasController cinemasController.CinemasController
+	MoviesController  moviesController.MoviesController
 	JWTMiddleware     middleware.JWTConfig
 }
 
@@ -42,6 +44,19 @@ func (cl *ControlerList) RouteRegister(echo *echo.Echo) {
 	cinemaAdmin.POST("", cl.CinemasController.CreateCinema)
 	cinemaAdmin.PUT("/edit/:slug", cl.CinemasController.UpdateCinemaBySlug)
 	cinemaAdmin.DELETE("/:slug", cl.CinemasController.DeleteCinemaBySlug)
+
+	//movies
+	movie := echo.Group("/api/v1/movie")
+	movie.GET("/find-slug/:slug", cl.MoviesController.FindMovieBySlug)
+	movie.GET("/find-title/:title", cl.MoviesController.FindMoviesByTitle)
+
+	//movies with admin role
+	movieAdmin := movie
+	movieAdmin.Use(middleware.JWTWithConfig(cl.JWTMiddleware), AdminValidation())
+	movieAdmin.POST("/upload-poster/:slug", cl.MoviesController.UploadPosterBySlug)
+	movieAdmin.POST("/:slug", cl.MoviesController.CreateMovie)
+	movieAdmin.PUT("/edit", cl.MoviesController.UpdateMovieBySlug)
+	movieAdmin.DELETE("/:slug", cl.MoviesController.DeleteMovieBySlug)
 }
 
 func AdminValidation() echo.MiddlewareFunc {
