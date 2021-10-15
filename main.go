@@ -3,9 +3,11 @@ package main
 import (
 	"TiBO_API/app/routes"
 	"TiBO_API/businesses/cinemasEntity"
+	"TiBO_API/businesses/invoiceEntity"
 	moviesEntity "TiBO_API/businesses/movieEntity"
 	"TiBO_API/businesses/usersEntity"
 	"TiBO_API/controllers/cinemasController"
+	"TiBO_API/controllers/invoiceController"
 	"TiBO_API/controllers/moviesController"
 	"TiBO_API/controllers/usersController"
 	"TiBO_API/helpers"
@@ -59,12 +61,18 @@ func main() {
 	movieService := moviesEntity.NewMoviesServices(moviesRepo, cinemaRepo, addrRepo, timeoutContext)
 	movieCtrl := moviesController.NewMoviesController(movieService)
 
+	//invoices
+	invoiceRepo := _domainFactory.NewInvoicesRepository(db)
+	invoiceService := invoiceEntity.NewInvoiceService(invoiceRepo, moviesRepo, cinemaRepo, userRepo, timeoutContext)
+	invoiceCtrl := invoiceController.NewInvoiceController(invoiceService)
+
 	//routes
 	routesInit := routes.ControlerList{
-		JWTMiddleware:     jwt.Init(),
-		UsersController:   *userCtrl,
-		CinemasController: *cinemaCtrl,
-		MoviesController:  *movieCtrl,
+		JWTMiddleware:      jwt.Init(),
+		UsersController:    *userCtrl,
+		CinemasController:  *cinemaCtrl,
+		MoviesController:   *movieCtrl,
+		InvoicesController: *invoiceCtrl,
 	}
 	routesInit.RouteRegister(echoApp)
 

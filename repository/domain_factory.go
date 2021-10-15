@@ -4,9 +4,11 @@ import (
 	"TiBO_API/businesses/addressesEntity"
 	"TiBO_API/businesses/cinemasEntity"
 	"TiBO_API/businesses/geolocationEntity"
+	"TiBO_API/businesses/invoiceEntity"
 	"TiBO_API/businesses/usersEntity"
 	"TiBO_API/repository/databases/addressesRepo"
 	"TiBO_API/repository/databases/cinemasRepo"
+	"TiBO_API/repository/databases/invoiceRepo"
 	"TiBO_API/repository/databases/moviesRepo"
 	"TiBO_API/repository/databases/usersRepo"
 
@@ -34,4 +36,8 @@ func NewGeolocationRepository() geolocationEntity.Repository {
 
 func NewMoviesRepository(db *gorm.DB) moviesEntity.Repository {
 	return moviesRepo.NewMoviesRepository(db)
+}
+
+func NewInvoicesRepository(db *gorm.DB) invoiceEntity.Repository {
+	return invoiceRepo.NewInvoicesRepository(db)
 }
