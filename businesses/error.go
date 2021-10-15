@@ -24,4 +24,8 @@ var (
 	//movies errors
 	ErrMovieNotFound     = errors.New("Movie not found")
 	ErrMovieNotAvailable = errors.New("Movie is comming soon")
+
+	//invoices errors
+	ErrTicketExceed    = errors.New("Ticket that you buy is more than cinema have")
+	ErrInvoiceNotFound = errors.New("Invoice Not Found")
 )
