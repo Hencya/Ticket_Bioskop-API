@@ -1,216 +1,21 @@
-swagger: "3.0"
+openapi: 3.0.3
 info:
   title: TiBO API
   description: API for buying and selling cinema tickets
   version: 1.0.0
-server: 
-  - url-development: http://localhost:8000/api/v1/
-  - url-deployment: http://api-tibo/api/v1/
-schemes:
-  - https
+servers:
+  - url: 'http://localhost:8000/api/v1/'
+  - url: 'http://api-tibo/api/v1/'
 tags:
-  - name: user
+  - name: User
     description: useres resource
-  - name: cinema
+  - name: Cinema
     description: cinemas resource
-  - name: invoice
+  - name: Invoice
     description: invoiceses resource
-  - name: movie
+  - name: Movie
     description: movies resource
 paths:
-  /cinema/find-ip:
-    get:
-      security:
-        - bearerAuth: []
-      tags:
-        - Cinema
-      summary: Find Cinema by user IP
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                properties:
-                  meta:
-                    $ref: "#/components/schemas/SuccessResponse"
-                  data:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/CinemaResponses"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/FailResponse404"
-  /cinema/find-name/{name}:
-    get:
-      security:
-        - bearerAuth: []
-      tags:
-        - Cinema
-      summary: Find cinema by its name
-      parameters:
-        - in: path
-          name: name
-          schema:
-            type: string
-          required: true
-          description: "Name of cinema"
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                properties:
-                  meta:
-                    $ref: "#/components/schemas/SuccessResponse"
-                  data:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/CinemaResponses"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/FailResponse404"
-  /cinema:
-    post:
-      security:
-        - bearerAuth: []
-      tags:
-        - Cinema
-      summary: Add a new cinema
-      parameters:
-        - in: body
-          name: cinema
-          required: true
-          schema:
-            $ref: "#/components/schemas/Cinema"
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                properties:
-                  meta:
-                    $ref: "#/components/schemas/SuccessResponse"
-                  data:
-                    $ref: "#/components/schemas/CinemaResponses"
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/FailResponse400"
-        "403":
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/FailResponse403"
-        "500":
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/FailResponse500"
-  /cinema/edit/{slug}:
-    put:
-      security:
-        - bearerAuth: []
-      tags:
-        - Laundromat
-      summary: Edit a cinema
-      parameters:
-        - in: path
-          name: slug
-          schema:
-            type: string
-          required: true
-          description: "Name of cinema"
-        - in: body
-          name: laundromat
-          required: true
-          schema:
-            $ref: "#/components/schemas/Cinema"
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                properties:
-                  meta:
-                    $ref: "#/components/schemas/SuccessResponse"
-                  data:
-                    $ref: "#/components/schemas/CinemaResponses"
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/FailResponse400"
-        "403":
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/FailResponse403"
-        "500":
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/FailResponse500"
-  /cinema/{slug}:
-    delete:
-      security:
-        - bearerAuth: []
-      tags:
-        - Cinema
-      summary: Delete a specified cinema
-      parameters:
-        - in: path
-          name: slug
-          schema:
-            type: string
-          description: slug of cinema to be deleted
-          required: true
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                properties:
-                  meta:
-                    $ref: "#/components/schemas/SuccessResponse"
-                  data:
-                    type: string
-                    example: Laundromat Deleted
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/FailResponse400"
-        "403":
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/FailResponse403"
-        "500":
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/FailResponse500"
   /users/login:
     post:
       tags:
@@ -301,6 +106,8 @@ paths:
                 $ref: "#/components/schemas/FailResponse500"
   /users/upload-avatar:
     post:
+      security:
+        - bearerAuth: [ ]
       tags:
         - User
       summary: Upload avatar user
@@ -339,7 +146,7 @@ paths:
     post:
       tags:
         - User
-      summary: logout 
+      summary: logout
       responses:
         "200":
           description: OK
@@ -366,7 +173,7 @@ paths:
   /user/update:
     put:
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       tags:
         - User
       summary: Edit a user
@@ -419,7 +226,7 @@ paths:
   /user/delete:
     delete:
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       tags:
         - User
       summary: Delete a specified user
@@ -456,7 +263,7 @@ paths:
   /user/{uuid}:
     get:
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       tags:
         - User
       summary: Find user by its uuid
@@ -486,10 +293,199 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/FailResponse404"
+  /cinema/find-ip:
+    get:
+      tags:
+        - Cinema
+      summary: Find Cinema by user IP
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: "#/components/schemas/SuccessResponse"
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/CinemaResponses"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse404"
+  /cinema/find-name/{name}:
+    get:
+      tags:
+        - Cinema
+      summary: Find cinema by its name
+      parameters:
+        - in: path
+          name: name
+          schema:
+            type: string
+          required: true
+          description: "Name of cinema"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: "#/components/schemas/SuccessResponse"
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/CinemaResponses"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse404"
+  /cinema:
+    post:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Cinema
+      summary: Add a new cinema
+      parameters:
+        - in: body
+          name: cinema
+          required: true
+          schema:
+            $ref: "#/components/schemas/Cinema"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: "#/components/schemas/SuccessResponse"
+                  data:
+                    $ref: "#/components/schemas/CinemaResponses"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse400"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse403"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse500"
+  /cinema/edit/{slug}:
+    put:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Cinema
+      summary: Edit a cinema
+      parameters:
+        - in: path
+          name: slug
+          schema:
+            type: string
+          required: true
+          description: "Name of cinema"
+        - in: body
+          name: laundromat
+          required: true
+          schema:
+            $ref: "#/components/schemas/Cinema"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: "#/components/schemas/SuccessResponse"
+                  data:
+                    $ref: "#/components/schemas/CinemaResponses"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse400"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse403"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse500"
+  /cinema/{slug}:
+    delete:
+      security:
+        - bearerAuth: [ ]
+      tags:
+        - Cinema
+      summary: Delete a specified cinema
+      parameters:
+        - in: path
+          name: slug
+          schema:
+            type: string
+          description: slug of cinema to be deleted
+          required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: "#/components/schemas/SuccessResponse"
+                  data:
+                    type: string
+                    example: Laundromat Deleted
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse400"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse403"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse500"
   /movie/{slug}:
     post:
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       tags:
         - Movie
       summary: Create a new movie
@@ -531,7 +527,7 @@ paths:
   /movie/edit/{slug}:
     put:
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       tags:
         - Movie
       summary: Edit an existing movie
@@ -579,7 +575,7 @@ paths:
   /movie/delete/{slug}:
     delete:
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       tags:
         - Movie
       summary: Delete a movie
@@ -684,8 +680,10 @@ paths:
                 $ref: "#/components/schemas/FailResponse404"
   /movie/upload-avatar:
     post:
+      security:
+        - bearerAuth: [ ]
       tags:
-        - User
+        - Movie
       summary: Upload avatar user
       parameters:
         - in: body
@@ -721,7 +719,7 @@ paths:
   /invoice:
     post:
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       tags:
         - Invoice
       summary: Invoice while user buying movie ticket
@@ -753,7 +751,7 @@ paths:
   /orders/get:
     get:
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       tags:
         - Invoice
       summary: Get all invoice made by user
@@ -778,7 +776,7 @@ paths:
                 $ref: "#/components/schemas/FailResponse404"
 components:
   securitySchemes:
-    bearerAuth: 
+    bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
@@ -816,7 +814,7 @@ components:
           type: integer
           example: (021)123123
         isOpen:
-          type: bolean
+          type: boolean
           example: true
         address_id:
           type: integer
@@ -881,6 +879,7 @@ components:
           type: string
           example: images/avatar/avatarProfile.png
     Movie:
+      type: object
       properties:
         slug:
           type: string
