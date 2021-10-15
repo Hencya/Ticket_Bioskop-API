@@ -3,7 +3,7 @@ package request
 import (
 	"TiBO_API/businesses/addressesEntity"
 	"TiBO_API/businesses/cinemasEntity"
-	"TiBO_API/controllers/usersController/addressesController/request"
+	"TiBO_API/controllers/addressesController/request"
 )
 
 type Cinemas struct {

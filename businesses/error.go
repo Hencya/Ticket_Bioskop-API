@@ -20,4 +20,8 @@ var (
 	ErrNearestCinemaNotFound = errors.New("No one Cinema found within your area")
 	ErrCinemaNotFound        = errors.New("Cinema not found")
 	ErrCinemaNotAvailable    = errors.New("Cinema is closed because of corona")
+
+	//movies errors
+	ErrMovieNotFound     = errors.New("Movie not found")
+	ErrMovieNotAvailable = errors.New("Movie is comming soon")
 )

@@ -2,8 +2,8 @@ package cinemasController
 
 import (
 	"TiBO_API/businesses/cinemasEntity"
-	"TiBO_API/controllers/usersController/cinemasController/request"
-	"TiBO_API/controllers/usersController/cinemasController/response"
+	"TiBO_API/controllers/cinemasController/request"
+	"TiBO_API/controllers/cinemasController/response"
 	"TiBO_API/helpers"
 	"net/http"
 
