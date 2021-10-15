@@ -3,6 +3,7 @@ package routes
 import (
 	"TiBO_API/app/middleware/auth"
 	"TiBO_API/controllers/cinemasController"
+	"TiBO_API/controllers/invoiceController"
 	"TiBO_API/controllers/moviesController"
 	"TiBO_API/controllers/usersController"
 	"TiBO_API/helpers"
@@ -14,10 +15,11 @@ import (
 )
 
 type ControlerList struct {
-	UsersController   usersController.UserController
-	CinemasController cinemasController.CinemasController
-	MoviesController  moviesController.MoviesController
-	JWTMiddleware     middleware.JWTConfig
+	UsersController    usersController.UserController
+	CinemasController  cinemasController.CinemasController
+	MoviesController   moviesController.MoviesController
+	InvoicesController invoiceController.InvoiceController
+	JWTMiddleware      middleware.JWTConfig
 }
 
 func (cl *ControlerList) RouteRegister(echo *echo.Echo) {
@@ -57,6 +59,12 @@ func (cl *ControlerList) RouteRegister(echo *echo.Echo) {
 	movieAdmin.POST("/:slug", cl.MoviesController.CreateMovie)
 	movieAdmin.PUT("/edit", cl.MoviesController.UpdateMovieBySlug)
 	movieAdmin.DELETE("/:slug", cl.MoviesController.DeleteMovieBySlug)
+
+	//invoices
+	invoices := echo.Group("/api/v1")
+	invoices.Use(middleware.JWTWithConfig(cl.JWTMiddleware))
+	invoices.POST("/buy", cl.InvoicesController.Create)
+	invoices.GET("/get-invoice", cl.InvoicesController.GetByUserID)
 }
 
 func AdminValidation() echo.MiddlewareFunc {
