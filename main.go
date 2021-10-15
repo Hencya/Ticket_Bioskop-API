@@ -3,9 +3,11 @@ package main
 import (
 	"TiBO_API/app/routes"
 	"TiBO_API/businesses/cinemasEntity"
+	moviesEntity "TiBO_API/businesses/movieEntity"
 	"TiBO_API/businesses/usersEntity"
+	"TiBO_API/controllers/cinemasController"
+	"TiBO_API/controllers/moviesController"
 	"TiBO_API/controllers/usersController"
-	"TiBO_API/controllers/usersController/cinemasController"
 	"TiBO_API/helpers"
 
 	ConfigJWT "TiBO_API/app/config/auth"
@@ -52,11 +54,17 @@ func main() {
 	cinemaService := cinemasEntity.NewCinemaServices(cinemaRepo, addrRepo, geoRepo, timeoutContext)
 	cinemaCtrl := cinemasController.NewCinemaController(cinemaService)
 
+	//movies
+	moviesRepo := _domainFactory.NewMoviesRepository(db)
+	movieService := moviesEntity.NewMoviesServices(moviesRepo, cinemaRepo, addrRepo, timeoutContext)
+	movieCtrl := moviesController.NewMoviesController(movieService)
+
 	//routes
 	routesInit := routes.ControlerList{
 		JWTMiddleware:     jwt.Init(),
 		UsersController:   *userCtrl,
 		CinemasController: *cinemaCtrl,
+		MoviesController:  *movieCtrl,
 	}
 	routesInit.RouteRegister(echoApp)
 
