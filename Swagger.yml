@@ -1,0 +1,1199 @@
+swagger: "3.0"
+info:
+  title: TiBO API
+  description: API for buying and selling cinema tickets
+  version: 1.0.0
+server: 
+  - url-development: http://localhost:8000/api/v1/
+  - url-deployment: http://api-tibo/api/v1/
+schemes:
+  - https
+tags:
+  - name: user
+    description: useres resource
+  - name: cinema
+    description: cinemas resource
+  - name: invoice
+    description: invoiceses resource
+  - name: movie
+    description: movies resource
+paths:
+  /cinema/find-ip:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - Cinema
+      summary: Find Cinema by user IP
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: "#/components/schemas/SuccessResponse"
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/CinemaResponses"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse404"
+  /cinema/find-name/{name}:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - Cinema
+      summary: Find cinema by its name
+      parameters:
+        - in: path
+          name: name
+          schema:
+            type: string
+          required: true
+          description: "Name of cinema"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: "#/components/schemas/SuccessResponse"
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/CinemaResponses"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse404"
+  /cinema:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - Cinema
+      summary: Add a new cinema
+      parameters:
+        - in: body
+          name: cinema
+          required: true
+          schema:
+            $ref: "#/components/schemas/Cinema"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: "#/components/schemas/SuccessResponse"
+                  data:
+                    $ref: "#/components/schemas/CinemaResponses"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse400"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse403"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse500"
+  /cinema/edit/{slug}:
+    put:
+      security:
+        - bearerAuth: []
+      tags:
+        - Laundromat
+      summary: Edit a cinema
+      parameters:
+        - in: path
+          name: slug
+          schema:
+            type: string
+          required: true
+          description: "Name of cinema"
+        - in: body
+          name: laundromat
+          required: true
+          schema:
+            $ref: "#/components/schemas/Cinema"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: "#/components/schemas/SuccessResponse"
+                  data:
+                    $ref: "#/components/schemas/CinemaResponses"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse400"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse403"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse500"
+  /cinema/{slug}:
+    delete:
+      security:
+        - bearerAuth: []
+      tags:
+        - Cinema
+      summary: Delete a specified cinema
+      parameters:
+        - in: path
+          name: slug
+          schema:
+            type: string
+          description: slug of cinema to be deleted
+          required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: "#/components/schemas/SuccessResponse"
+                  data:
+                    type: string
+                    example: Laundromat Deleted
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse400"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse403"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse500"
+  /users/login:
+    post:
+      tags:
+        - User
+      summary: Logs user into system
+      parameters:
+        - in: body
+          name: user
+          required: true
+          schema:
+            properties:
+              email:
+                type: string
+              password:
+                type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: "#/components/schemas/SuccessResponse"
+                  data:
+                    type: object
+                    properties:
+                      token:
+                        type: string
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse400"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse500"
+  /users/register:
+    post:
+      tags:
+        - User
+      summary: Register new user
+      parameters:
+        - in: body
+          name: user
+          required: true
+          schema:
+            properties:
+              name:
+                type: string
+              username:
+                type: string
+              password:
+                type: string
+                format: password
+              email:
+                type: string
+              phone_number:
+                type: string
+              address:
+                $ref: "#/components/schemas/Address"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: "#/components/schemas/SuccessResponse"
+                  data:
+                    $ref: "#/components/schemas/UserResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse400"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse500"
+  /users/upload-avatar:
+    post:
+      tags:
+        - User
+      summary: Upload avatar user
+      parameters:
+        - in: body
+          name: user
+          required: true
+          schema:
+            properties:
+              avatar:
+                type: file
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: "#/components/schemas/SuccessResponse"
+                  data:
+                    $ref: "#/components/schemas/UserResponseAvatar"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse400"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse500"
+  /users/logout:
+    post:
+      tags:
+        - User
+      summary: logout 
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: "#/components/schemas/SuccessResponse"
+                  data:
+                    $ref: "#/components/schemas/UserResponse"
+        "408":
+          description: Request Timeout
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse400"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse500"
+  /user/update:
+    put:
+      security:
+        - bearerAuth: []
+      tags:
+        - User
+      summary: Edit a user
+      parameters:
+        - in: body
+          name: user
+          required: true
+          schema:
+            properties:
+              name:
+                type: string
+              username:
+                type: string
+              password:
+                type: string
+                format: password
+              email:
+                type: string
+              phone_number:
+                type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: "#/components/schemas/SuccessResponse"
+                  data:
+                    $ref: "#/components/schemas/CinemaResponses"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse400"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse403"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse500"
+  /user/delete:
+    delete:
+      security:
+        - bearerAuth: []
+      tags:
+        - User
+      summary: Delete a specified user
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: "#/components/schemas/SuccessResponse"
+                  data:
+                    type: string
+                    example: User Deleted
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse400"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse403"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse500"
+  /user/{uuid}:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - User
+      summary: Find user by its uuid
+      parameters:
+        - in: path
+          name: uuid
+          schema:
+            type: string
+          required: true
+          description: "uuid of user"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: "#/components/schemas/SuccessResponse"
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/UserResponse"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse404"
+  /movie/{slug}:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - Movie
+      summary: Create a new movie
+      parameters:
+        - in: path
+          name: slug
+          schema:
+            type: string
+          required: true
+          description: Cinema slug
+        - in: body
+          name: movie
+          required: true
+          schema:
+            $ref: "#/components/schemas/Movie"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: "#/components/schemas/SuccessResponse"
+                  data:
+                    $ref: "#/components/schemas/MovieResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse400"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse500"
+  /movie/edit/{slug}:
+    put:
+      security:
+        - bearerAuth: []
+      tags:
+        - Movie
+      summary: Edit an existing movie
+      parameters:
+        - in: path
+          name: slug
+          schema:
+            type: string
+          required: true
+          description: Movie slug
+        - in: body
+          name: movie
+          required: true
+          schema:
+            $ref: "#/components/schemas/Movie"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: "#/components/schemas/SuccessResponse"
+                  data:
+                    $ref: "#/components/schemas/MovieResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse400"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse403"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse500"
+  /movie/delete/{slug}:
+    delete:
+      security:
+        - bearerAuth: []
+      tags:
+        - Movie
+      summary: Delete a movie
+      parameters:
+        - in: path
+          name: slug
+          schema:
+            type: string
+          required: true
+          description: movie slug
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: "#/components/schemas/SuccessResponse"
+                  data:
+                    type: string
+                    example: Product Deleted
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse400"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse403"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse500"
+  /movie/find-title/{title}:
+    get:
+      tags:
+        - Movie
+      summary: Find movie by its title
+      parameters:
+        - in: path
+          name: title
+          schema:
+            type: string
+          required: true
+          description: "title of movie"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: "#/components/schemas/SuccessResponse"
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/MovieResponse"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse404"
+  /movie/find-slug/{slug}:
+    get:
+      tags:
+        - Movie
+      summary: Find movie by its slug
+      parameters:
+        - in: path
+          name: slug
+          schema:
+            type: string
+          required: true
+          description: "slug of movie"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: "#/components/schemas/SuccessResponse"
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/MovieResponse"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse404"
+  /movie/upload-avatar:
+    post:
+      tags:
+        - User
+      summary: Upload avatar user
+      parameters:
+        - in: body
+          name: user
+          required: true
+          schema:
+            properties:
+              avatar:
+                type: file
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: "#/components/schemas/SuccessResponse"
+                  data:
+                    $ref: "#/components/schemas/MovieResponsePoster"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse400"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse500"
+  /invoice:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - Invoice
+      summary: Invoice while user buying movie ticket
+      parameters:
+        - in: body
+          name: invoice
+          required: true
+          schema:
+            $ref: "#/components/schemas/Invoice"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: "#/components/schemas/SuccessResponse"
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/InvoiceResponse"
+        "400":
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse400"
+  /orders/get:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - Invoice
+      summary: Get all invoice made by user
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: "#/components/schemas/SuccessResponse"
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/InvoiceResponse"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse404"
+components:
+  securitySchemes:
+    bearerAuth: 
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Address:
+      type: object
+      properties:
+        id:
+          type: integer
+        street:
+          type: string
+        city:
+          type: string
+        province:
+          type: string
+    Cinema:
+      type: object
+      properties:
+        name:
+          type: string
+        status:
+          type: boolean
+        address:
+          $ref: "#/components/schemas/Address"
+    CinemaResponses:
+      properties:
+        slug:
+          type: string
+          format: slug
+          example: xx1-jakarta
+        name:
+          type: string
+          example: XX1
+        phone_number:
+          type: integer
+          example: (021)123123
+        isOpen:
+          type: bolean
+          example: true
+        address_id:
+          type: integer
+          example: 1
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date_time
+    User:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        name:
+          type: string
+        phone_number:
+          type: string
+        username:
+          type: string
+        created_at:
+          type: string
+          format: timestamp
+        updated_at:
+          type: string
+          format: timestamp
+    UserResponse:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          example: aslkdasilkdjla;sdlka
+        username:
+          type: string
+          example: testing
+        name:
+          type: string
+          example: user testing
+        email:
+          type: string
+          example: emailtesting@mail.com
+        phone_number:
+          type: string
+          example: 081279312931
+        Avatar:
+          type: string
+          example: images/avatar/avatarProfile.png
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date_time
+    UserResponseAvatar:
+      type: object
+      properties:
+        avatar:
+          type: string
+          example: images/avatar/avatarProfile.png
+    Movie:
+      properties:
+        slug:
+          type: string
+          format: slug
+        title:
+          type: string
+        poster:
+          type: string
+        trailerUrl:
+          type: string
+        movierUrl:
+          type: string
+        synopsis:
+          type: string
+        genre:
+          type: string
+        duration:
+          type: string
+        language:
+          type: string
+        director:
+          type: string
+        censorRating:
+          type: string
+        subtitle:
+          type: string
+        scheduleDate:
+          type: string
+        scheduleTime:
+          type: string
+        statusCommingSoon:
+          type: boleam
+        ticket:
+          type: int
+        price:
+          type: int
+        cinemaId:
+          type: uint
+        cinemaName:
+          type: string
+        cinemaAddress:
+          type: string
+        adminFee:
+          type: int
+        created_at:
+          type: string
+          format: timestamp
+        updated_at:
+          type: string
+          format: timestamp
+    MovieResponse:
+      type: object
+      properties:
+        slug:
+          type: string
+          format: slug
+          example: 15
+        title:
+          type: string
+          example: "avenger endgame"
+        poster:
+          type: string
+          example: poster.jpg
+        trailerUrl:
+          type: string
+          example: "www.google.com"
+        movierUrl:
+          type: string
+          example: "www.google.com"
+        synopsis:
+          type: string
+          example: "ini adalah synopsis"
+        genre:
+          type: string
+          example: "action"
+        duration:
+          type: string
+          example: "3 jam"
+        language:
+          type: string
+          example: "english"
+        director:
+          type: string
+          example: "faiz"
+        censorRating:
+          type: string
+          example: "17+"
+        subtitle:
+          type: string
+          example: "Indonesia"
+        scheduleDate:
+          type: string
+          example: "12 agustus 2021"
+        scheduleTime:
+          type: string
+          example: "18:00"
+        statusCommingSoon:
+          type: boleam
+          example: false
+        ticket:
+          type: int
+          example: 2
+        price:
+          type: int
+          example: 10000
+        cinemaId:
+          type: uint
+          example: 10000
+        cinemaName:
+          type: string
+          example: "XX1"
+        cinemaAddress:
+          type: string
+          example: "Jl testing"
+        adminFee:
+          type: int
+          example: 1000
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date_time
+    MovieResponsePoster:
+      type: object
+      properties:
+        avatar:
+          type: string
+          example: images/poster/avatarProfile.png
+    Invoice:
+      properties:
+        id:
+          type: integer
+        name_user:
+          type: string
+        date:
+          type: string
+        show_time:
+          type: string
+        admin_fee:
+          type: int
+        total_ticket_prices:
+          type: int
+        total_prices:
+          type: int
+        movie_id:
+          type: int
+        movie_price:
+          type: int
+        movie_title:
+          type: string
+        movie_url:
+          type: string
+        user_id:
+          type: integer
+        cinema_id:
+          type: integer
+        cinema_name:
+          type: string
+        cinema_address:
+          type: string
+        created_at:
+          type: string
+    InvoiceResponse:
+      properties:
+        id:
+          type: integer
+          format: uuid
+          example: 15
+        name_user:
+          type: string
+          example: opung luhut
+        date:
+          type: string
+          example: "01-10-2021"
+        show_time:
+          type: string
+          example: "19:00"
+        admin_fee:
+          type: int
+          example: 3000
+        total_ticket_prices:
+          type: int
+          example: 30000
+        total_prices:
+          type: int
+          example: 33000
+        movie_id:
+          type: int
+          example: 1
+        movie_price:
+          type: int
+          example: 10000
+        movie_title:
+          type: string
+          example: avenger endgame
+        movie_url:
+          type: string
+          example: www.google/endgame.com
+        user_id:
+          type: integer
+          example: 12
+        cinema_id:
+          type: integer
+          example: 12
+        cinema_name:
+          type: string
+          example: XX1
+        cinema_address:
+          type: string
+          example: Jl testing no 1 Jakarya testing
+        created_at:
+          type: string
+          format: date-time
+    Login:
+      type: object
+      properties:
+        status: true
+        message: successful to login
+        token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2MzIyMTU5ODUsInVzZXJpZCI6MTF9.N72CvB3ffoZKvntUC4MAtDPpzQTQjIfzvnNSTNBuC7A
+    Logout:
+      type: object
+      properties:
+        status: true
+        message: you have successfully logged out
+        data: null
+    SuccessResponse:
+      type: object
+      properties:
+        meta:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Success
+    FailResponse400:
+      type: object
+      properties:
+        meta:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 400
+            message:
+              type: string
+              example: Error
+            messages:
+              type: array
+              items:
+                example: Error message goes here
+        data:
+          type: string
+          example: null
+    FailResponse403:
+      type: object
+      properties:
+        meta:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 403
+            message:
+              type: string
+              example: Error
+            messages:
+              type: array
+              items:
+                example: User Unauthorized
+        data:
+          type: string
+          example: null
+    FailResponse404:
+      type: object
+      properties:
+        meta:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 404
+            message:
+              type: string
+              example: Error
+            messages:
+              type: array
+              items:
+                example: Error message goes here
+        data:
+          type: string
+          example: null
+    FailResponse500:
+      type: object
+      properties:
+        meta:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 500
+            message:
+              type: string
+              example: Error
+            messages:
+              type: array
+              items:
+                example: Error message goes here
+        data:
+          type: string
+          example: null
