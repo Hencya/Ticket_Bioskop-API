@@ -37,7 +37,7 @@ func (ctrl *InvoiceController) Create(c echo.Context) error {
 			helpers.BuildErrorResponse("Something Gone Wrong,Please Contact Administrator",
 				err, helpers.EmptyObj{}))
 	}
-	return c.JSON(http.StatusOK,
+	return c.JSON(http.StatusCreated,
 		helpers.BuildSuccessResponse("Successfully Created invoice ",
 			data))
 }

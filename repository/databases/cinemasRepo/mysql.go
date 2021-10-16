@@ -7,19 +7,16 @@ import (
 
 	"github.com/gosimple/slug"
 
-	//"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
 type CinemsRepository struct {
 	db *gorm.DB
-	//cld *cloudinary.Cloudinary
 }
 
 func NewCinemasRepository(db *gorm.DB) cinemasEntity.Repository {
 	return &CinemsRepository{
 		db: db,
-		//cld: cld,
 	}
 }
 
