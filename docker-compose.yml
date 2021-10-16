@@ -3,12 +3,13 @@ version: "3.9"
 services:
   database_mysql:
     image: mysql:latest
-    hostname: host.docker.internal
+    container_name: dockerDB
     restart: "no"
     ports:
       - 3305:3306
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
+      MYSQL_USER: ${DB_HOST_DOCKER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: ${DB_NAME}
 
