@@ -23,6 +23,10 @@ func SetupDatabaseConnection() *gorm.DB {
 
 	var dbName string
 	var dbHost string
+
+	dbHost = os.Getenv("DB_HOST")
+	dbName = os.Getenv("DB_NAME_TESTING")
+
 	if runtime.GOOS != "windows" {
 		dbName = os.Getenv("DB_NAME")
 		dbHost = os.Getenv("DB_HOST_DOCKER")
