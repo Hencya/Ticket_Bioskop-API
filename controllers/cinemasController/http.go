@@ -80,21 +80,21 @@ func (ctrl *CinemasController) FindCinemaByName(c echo.Context) error {
 			data))
 }
 
-func (ctrl *CinemasController) FindCinemaBySlug(c echo.Context) error {
-	slug := c.Param("slug")
-
-	cinema, err := ctrl.cinemasServices.FindBySlug(c.Request().Context(), slug)
-	if err != nil {
-		return c.JSON(http.StatusNotFound,
-			helpers.BuildErrorResponse("Cinema doesn't exist",
-				err, helpers.EmptyObj{}))
-	}
-
-	return c.JSON(http.StatusOK,
-		helpers.BuildSuccessResponse("Successfully Get User By id",
-			response.FromDomain(cinema)))
-
-}
+//func (ctrl *CinemasController) FindCinemaBySlug(c echo.Context) error {
+//	slug := c.Param("slug")
+//
+//	cinema, err := ctrl.cinemasServices.FindBySlug(c.Request().Context(), slug)
+//	if err != nil {
+//		return c.JSON(http.StatusNotFound,
+//			helpers.BuildErrorResponse("Cinema doesn't exist",
+//				err, helpers.EmptyObj{}))
+//	}
+//
+//	return c.JSON(http.StatusOK,
+//		helpers.BuildSuccessResponse("Successfully Get User By id",
+//			response.FromDomain(cinema)))
+//
+//}
 
 func (ctrl *CinemasController) UpdateCinemaBySlug(c echo.Context) error {
 	slug := c.Param("slug")
@@ -148,7 +148,7 @@ func (ctrl *CinemasController) DeleteCinemaBySlug(c echo.Context) error {
 				err, helpers.EmptyObj{}))
 	}
 
-	return c.JSON(http.StatusCreated,
+	return c.JSON(http.StatusOK,
 		helpers.BuildSuccessResponse("Successfully Deleted a cinemas",
 			nil))
 }
