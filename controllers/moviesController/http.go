@@ -117,7 +117,7 @@ func (ctrl *MoviesController) UpdateMovieBySlug(c echo.Context) error {
 			helpers.BuildErrorResponse("Something Gone Wrong,Please Contact Administrator",
 				err, helpers.EmptyObj{}))
 	}
-	return c.JSON(http.StatusCreated,
+	return c.JSON(http.StatusOK,
 		helpers.BuildSuccessResponse("Successfully updated a movie",
 			response.FromDomain(*res)))
 }
@@ -138,7 +138,7 @@ func (ctrl *MoviesController) DeleteMovieBySlug(c echo.Context) error {
 				err, helpers.EmptyObj{}))
 	}
 
-	return c.JSON(http.StatusCreated,
+	return c.JSON(http.StatusOK,
 		helpers.BuildSuccessResponse("Successfully Deleted a movie",
 			nil))
 }
@@ -161,7 +161,7 @@ func (ctrl *MoviesController) UploadPosterBySlug(c echo.Context) error {
 				errGet, helpers.EmptyObj{}))
 	}
 
-	path := fmt.Sprintf("images/poster/%d-%s", movie.Slug, file.Filename)
+	path := fmt.Sprintf("images/poster/%v-%s", movie.Slug, file.Filename)
 
 	src, err := file.Open()
 	if err != nil {

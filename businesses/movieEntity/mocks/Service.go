@@ -102,6 +102,27 @@ func (_m *Service) FindByTitle(ctx context.Context, title string) ([]moviesEntit
 	return r0, r1
 }
 
+// GetOneByTitle provides a mock function with given fields: ctx, title
+func (_m *Service) GetOneByTitle(ctx context.Context, title string) (moviesEntity.Domain, error) {
+	ret := _m.Called(ctx, title)
+
+	var r0 moviesEntity.Domain
+	if rf, ok := ret.Get(0).(func(context.Context, string) moviesEntity.Domain); ok {
+		r0 = rf(ctx, title)
+	} else {
+		r0 = ret.Get(0).(moviesEntity.Domain)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, string) error); ok {
+		r1 = rf(ctx, title)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // UpdateMovie provides a mock function with given fields: ctx, movieDomain, slugCinema, slugMovie
 func (_m *Service) UpdateMovie(ctx context.Context, movieDomain *moviesEntity.Domain, slugCinema string, slugMovie string) (*moviesEntity.Domain, error) {
 	ret := _m.Called(ctx, movieDomain, slugCinema, slugMovie)
