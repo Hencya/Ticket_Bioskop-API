@@ -7,7 +7,8 @@ mockAddress "TiBO_API/businesses/addressesEntity/mocks"
 "TiBO_API/businesses/cinemasEntity"
 moviesEntity "TiBO_API/businesses/movieEntity"
 mockMovie "TiBO_API/businesses/movieEntity/mocks"
-"context"
+	"TiBO_API/businesses/usersEntity"
+	"context"
 "github.com/stretchr/testify/assert"
 "github.com/stretchr/testify/mock"
 "testing"
@@ -34,7 +35,7 @@ func TestMain(m *testing.M) {
 		Title:            "testing title",
 		TrailerUrl:       "www.testingTrailer.com",
 		MovieUrl:         "www.testingMovie.com",
-		Poster:           "poster.jpg",
+		Poster:           "images/poster/poster.png",
 		Synopsis:         "ini adalah testing",
 		Genre:            "Horror",
 		Duration:         "3 Hours",
@@ -337,3 +338,43 @@ func TestUpdate(t *testing.T){
 	})
 }
 
+func TestMoviesServices_UploadPoster(t *testing.T) {
+	t.Run("Valid Test", func(t *testing.T){
+		mockMovieRepository.On("GetBySlug", mock.Anything,mock.AnythingOfType("string")).Return(movieDomain, nil).Once()
+		mockMovieRepository.On("UploadPoster",mock.Anything,mock.Anything,mock.Anything).Return(&movieDomain, nil).Once()
+
+		req := &moviesEntity.Domain{
+			Poster: "images/poster/poster.png",
+		}
+
+		res, err := movieService.UploadPoster(context.Background(),"test-slug",req.Poster)
+
+		assert.Nil(t, err)
+		assert.Equal(t, movieDomain.Poster, res.Poster)
+	})
+	t.Run("Invalid Test || movie not found", func(t *testing.T){
+		mockMovieRepository.On("GetBySlug", mock.Anything,mock.AnythingOfType("string")).Return(moviesEntity.Domain{}, assert.AnError).Once()
+		mockMovieRepository.On("UploadPoster",mock.Anything,mock.Anything,mock.Anything).Return(&movieDomain, nil).Once()
+
+		req := &moviesEntity.Domain{
+			Poster: "images/poster/poster.png",
+		}
+
+		res, err := movieService.UploadPoster(context.Background(),"test-slug",req.Poster)
+
+		assert.NotNil(t, err)
+		assert.NotEqual(t, usersEntity.Domain{}, res)
+	})
+	t.Run("Invalid Test || failed to upload poster", func(t *testing.T){
+		mockMovieRepository.On("GetBySlug", mock.Anything,mock.AnythingOfType("string")).Return(movieDomain,nil).Once()
+		mockMovieRepository.On("UploadPoster",mock.Anything,mock.Anything,mock.Anything).Return(&moviesEntity.Domain{}, assert.AnError).Once()
+
+		req := &moviesEntity.Domain{
+			Poster: "images/poster/poster.png",
+		}
+
+		res, _ := movieService.UploadPoster(context.Background(),"test-slug",req.Poster)
+
+		assert.NotEqual(t, usersEntity.Domain{}, res)
+	})
+}

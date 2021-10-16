@@ -248,4 +248,29 @@ func TestUserServices_UploadAvatar(t *testing.T) {
 		assert.Nil(t, err)
 		assert.Equal(t, usersDomain.Avatar, res.Avatar)
 	})
+	t.Run("Invalid Test || user not found", func(t *testing.T){
+		mockUsersRepository.On("GetByUuid", mock.Anything,mock.AnythingOfType("string")).Return(usersEntity.Domain{}, assert.AnError).Once()
+		mockUsersRepository.On("UploadAvatar",mock.Anything,mock.Anything,mock.Anything).Return(&usersDomain, nil).Once()
+
+		req := &usersEntity.Domain{
+			Avatar: "images/avatar/avatar.png",
+		}
+
+		res, err := userServices.UploadAvatar(context.Background(),"kajdnkajsdkjas",req.Avatar)
+
+		assert.NotNil(t, err)
+		assert.NotEqual(t, usersEntity.Domain{}, res)
+	})
+	t.Run("Invalid Test || failed to upload avatar", func(t *testing.T){
+		mockUsersRepository.On("GetByUuid", mock.Anything,mock.AnythingOfType("string")).Return(usersDomain,nil).Once()
+		mockUsersRepository.On("UploadAvatar",mock.Anything,mock.Anything,mock.Anything).Return(&usersEntity.Domain{}, assert.AnError).Once()
+
+		req := &usersEntity.Domain{
+			Avatar: "images/avatar/avatar.png",
+		}
+
+		res, _ := userServices.UploadAvatar(context.Background(),"kajdnkajsdkjas",req.Avatar)
+		
+		assert.NotEqual(t, usersEntity.Domain{}, res)
+	})
 }
