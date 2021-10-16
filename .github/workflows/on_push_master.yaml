@@ -24,7 +24,7 @@ jobs:
           MYSQL_ALLOW_EMPTY_PASSWORD: 1
           MYSQL_USER: ${DB_HOST_DOCKER}
           MYSQL_PASSWORD: ${DB_PASSWORD}
-          MYSQL_DATABASE: ${DB_NAME}
+          MYSQL_DATABASE: ${DB_NAME_TESTING}
         ports:
           - 3305:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
@@ -32,13 +32,6 @@ jobs:
       matrix:
         go: [ '1.17' ]
     steps:
-#      - name: "Git Checkout"
-#        uses: actions/checkout@v2
-#      - name: create database
-#        run: |
-#          apt-get update
-#          apt-get install -y mariadb-client
-#          mysql --host mysql -uroot -proot -e "CREATE DATABASE IF NOT EXISTS tibo_database_test"
       - name: running unitest
         run: |
           go mod tidy
