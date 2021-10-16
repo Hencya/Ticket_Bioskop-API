@@ -223,7 +223,6 @@ func TestMoviesServices_CreateMovie(t *testing.T) {
 		assert.NotNil(t, err)
 		assert.NotEqual(t, movieDomain, resp)
 	})
-
 }
 
 func TestMoviesServices_FindByTitle(t *testing.T) {
