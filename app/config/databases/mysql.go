@@ -22,17 +22,13 @@ func SetupDatabaseConnection() *gorm.DB {
 	}
 
 	var dbName string
-	if os.Getenv("ENV") == "TESTING" {
-		dbName = os.Getenv("DB_NAME_TESTING")
-	} else {
-		dbName = os.Getenv("DB_NAME")
-	}
-
 	var dbHost string
 	if runtime.GOOS != "windows" {
+		dbName = os.Getenv("DB_NAME")
 		dbHost = os.Getenv("DB_HOST_DOCKER")
 	}else {
 		dbHost = os.Getenv("DB_HOST")
+		dbName = os.Getenv("DB_NAME_TESTING")
 	}
 
 	dbPass := os.Getenv("DB_PASSWORD")
