@@ -38,7 +38,7 @@ jobs:
         run: |
           apt-get update
           apt-get install -y mariadb-client
-          mysql --host dockerDB -uroot -proot -e "CREATE DATABASE IF NOT EXISTS tibo_database_test"
+          mysql --host mysql -uroot -proot -e "CREATE DATABASE IF NOT EXISTS tibo_database_test"
       - name: running unitest
         run: |
           go mod tidy
