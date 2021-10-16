@@ -39,7 +39,7 @@ jobs:
           DB_HOST: dockerDB
           DB_PORT: 8000
           DB_PASS: root
-          DB_NAME: tibo_database_test
+          DB_NAME: tibo_database
         run: |
           go mod tidy
           go test ./... -cover -failfast

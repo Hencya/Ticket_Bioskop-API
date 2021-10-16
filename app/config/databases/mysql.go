@@ -7,12 +7,10 @@ import (
 	"TiBO_API/repository/databases/moviesRepo"
 	"TiBO_API/repository/databases/usersRepo"
 	"fmt"
-	"os"
-	"runtime"
-
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"os"
 )
 
 func SetupDatabaseConnection() *gorm.DB {
@@ -22,21 +20,14 @@ func SetupDatabaseConnection() *gorm.DB {
 	}
 
 	var dbName string
-	var dbHost string
-
-	dbHost = os.Getenv("DB_HOST")
-	dbName = os.Getenv("DB_NAME_TESTING")
-
-	if runtime.GOOS != "windows" {
-		dbName = os.Getenv("DB_NAME")
-		dbHost = os.Getenv("DB_HOST_DOCKER")
-	}else {
-		dbHost = os.Getenv("DB_HOST")
+	if os.Getenv("ENV") == "TESTING"{
 		dbName = os.Getenv("DB_NAME_TESTING")
+	} else {
+		dbName = os.Getenv("DB_NAME")
 	}
-
-	dbPass := os.Getenv("DB_PASSWORD")
 	dbUser := os.Getenv("DB_USER")
+	dbPass := os.Getenv("DB_PASS")
+	dbHost := os.Getenv("DB_HOST")
 	dbPort := os.Getenv("DB_PORT")
 
 	dsn := fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?charset=utf8mb4&parseTime=True&loc=Local", dbUser, dbPass, dbHost, dbPort, dbName)
