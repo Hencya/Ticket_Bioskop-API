@@ -24,11 +24,11 @@ func SetupDatabaseConnection() *gorm.DB {
 	var dbName string
 	var dbHost string
 	if runtime.GOOS != "windows" {
-		dbName = os.Getenv("DB_NAME")
+		dbName = os.Getenv("DB_NAME_TESTING")
 		dbHost = os.Getenv("DB_HOST_DOCKER")
 	}else {
 		dbHost = os.Getenv("DB_HOST")
-		dbName = os.Getenv("DB_NAME_TESTING")
+		dbName = os.Getenv("DB_NAME")
 	}
 
 	dbPass := os.Getenv("DB_PASSWORD")
