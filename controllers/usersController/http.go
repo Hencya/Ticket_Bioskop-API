@@ -186,7 +186,7 @@ func (ctrl *UserController) UploadAvatar(c echo.Context) error {
 	user := auth.GetUser(c)
 	userID := user.Uuid
 
-	path := fmt.Sprintf("images/avatar/%d-%s", userID, file.Filename)
+	path := fmt.Sprintf("images/avatar/%v-%s", userID, file.Filename)
 
 	src, err := file.Open()
 	if err != nil {
