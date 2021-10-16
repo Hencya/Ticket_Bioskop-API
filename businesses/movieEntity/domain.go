@@ -39,6 +39,7 @@ type Service interface {
 	UpdateMovie(ctx context.Context, movieDomain *Domain, slugCinema string, slugMovie string) (*Domain, error)
 	UploadPoster(ctx context.Context, slug string, fileLocation string) (*Domain, error)
 	DeleteBySlug(ctx context.Context, slug string) (string, error)
+	GetOneByTitle(ctx context.Context, title string) (Domain, error)
 }
 
 type Repository interface {
