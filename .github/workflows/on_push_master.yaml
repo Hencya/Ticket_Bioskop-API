@@ -32,7 +32,14 @@ jobs:
       matrix:
         go: [ '1.17' ]
     steps:
+      - name: "Git Checkout"
+        uses: actions/checkout@v2
       - name: running unitest
+        env:
+          DB_HOST: dockerDB
+          DB_PORT: 8000
+          DB_PASS: root
+          DB_NAME: tibo_database_test
         run: |
           go mod tidy
           go test ./... -cover -failfast
