@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+  database_mysql:
+    image: mysql:latest
+    hostname: host.docker.internal
+    restart: "no"
+    ports:
+      - 3305:3306
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+
+  web:
+    container_name: TiBO-api
+    build: .
+    restart: "no"
+    ports:
+      - 8005:8000
+    volumes:
+      - .:/user/src/app

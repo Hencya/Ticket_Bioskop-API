@@ -1,6 +1,10 @@
 package databases
 
 import (
+	"TiBO_API/repository/databases/addressesRepo"
+	"TiBO_API/repository/databases/cinemasRepo"
+	"TiBO_API/repository/databases/invoiceRepo"
+	"TiBO_API/repository/databases/moviesRepo"
 	"TiBO_API/repository/databases/usersRepo"
 	"fmt"
 	"os"
@@ -42,4 +46,8 @@ func SetupDatabaseConnection() *gorm.DB {
 
 func dbMigrate(db *gorm.DB) {
 	db.AutoMigrate(&usersRepo.Users{})
+	db.AutoMigrate(&addressesRepo.Addresses{})
+	db.AutoMigrate(&cinemasRepo.Cinemas{})
+	db.AutoMigrate(&moviesRepo.Movies{})
+	db.AutoMigrate(&invoiceRepo.Invoices{})
 }
