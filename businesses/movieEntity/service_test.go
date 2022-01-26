@@ -1,18 +1,19 @@
 package moviesEntity_test
 
 import (
-mockCinema "TiBO_API/businesses/CinemasEntity/mocks"
-"TiBO_API/businesses/addressesEntity"
-mockAddress "TiBO_API/businesses/addressesEntity/mocks"
-"TiBO_API/businesses/cinemasEntity"
-moviesEntity "TiBO_API/businesses/movieEntity"
-mockMovie "TiBO_API/businesses/movieEntity/mocks"
+	mockCinema "TiBO_API/businesses/CinemasEntity/mocks"
+	"TiBO_API/businesses/addressesEntity"
+	mockAddress "TiBO_API/businesses/addressesEntity/mocks"
+	"TiBO_API/businesses/cinemasEntity"
+	moviesEntity "TiBO_API/businesses/movieEntity"
+	mockMovie "TiBO_API/businesses/movieEntity/mocks"
 	"TiBO_API/businesses/usersEntity"
 	"context"
-"github.com/stretchr/testify/assert"
-"github.com/stretchr/testify/mock"
-"testing"
-"time"
+	"testing"
+	"time"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 var (
