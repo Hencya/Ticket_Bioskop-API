@@ -1,0 +1,2 @@
+INSERT INTO users(name,username,email,password,phone_number,role,avatar)
+VALUES("Admin TIBO","admin TiBO","adminTibo@gmail.com","$2a$04$ovwLB4Ru4c0ConnyLDjO6.1W9ez01niOzbFM3eNZeLUYF79kLyXA2","081278486869","admin","-");

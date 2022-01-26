@@ -1,6 +1,5 @@
-# builder
+# Builder
 FROM golang:1.17-alpine AS builder
-
 RUN mkdir /app
 ADD . /app
 WORKDIR /app
@@ -11,6 +10,5 @@ RUN go build -o main
 FROM alpine:3.14
 WORKDIR /app
 COPY --from=builder /app/main .
-COPY --from=builder /app/.env .
-EXPOSE 8000
+EXPOSE 8080
 CMD ["./main"]
